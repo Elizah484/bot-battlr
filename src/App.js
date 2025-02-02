@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import './App.css';
 import BotCollection from "./components/BotCollection";
 import BotArmy from './components/BotArmy';
+import BotSpecs from '/components/BotSpecs';
+import FilterBar from '/components/FilterBar';
+import SortBar from '/components/SortBar';
 
 const App= ()=>{
   const [bots, setBots]=useState([]);
@@ -9,35 +13,25 @@ const App= ()=>{
   
   useEffect(() => {
     fetch("http://localhost:8001/bots")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setBots(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-  
+      .then((res) => res.json())
+      .then((data) => setBots(data));
 
-      const enlist=(bot)=>{
-        if(!army.some((enlistedBot)=> enlistedBot.id === bot.id)){
-          setArmy([...army, bot]);
-        }
-      };
-      const releaseBot=(bot)=>{
-        setArmy(army.filter((enlistedBot)=> enlistedBot.id !== bot.id));
-      };
-     
-      const deletebot=(bot)=>{
-        setArmy ((prevArmy)=> prevArmy.filter ((enlistBot)=> enlistBot.id !== bot.id));
-      }
+  }, []);
+        
       return(
-        <div className ="App">
-          <h1>My bot battlr</h1>
-          <BotArmy army={army} releaseBot={releaseBot} deleteBot={deletebot}/>
-          <BotCollection bots={bots} enlist={enlist}/>
-        </div>
+        
+        <Router>
+          <div>
+            <h1>Bot Battlr</h1>
+            <SortBar setBots={setBots}/>
+            <FilterBar setBots={setBots}/>
+            <BotArmy army={army} setArmy={setArmy}/>
+            <Routes>
+              <Route path="/" elements ={<BotCollection bots={bots} army={army} setArmy={setArmy}/>} />
+              <Route path="/bot/:id" elements ={<BotSpecs bots={bots} army={army} setArmy={setArmy}/>} />
+            </Routes>
+          </div>
+        </Router>
       );
-};
+}
 export default App;

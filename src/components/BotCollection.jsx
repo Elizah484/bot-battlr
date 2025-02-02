@@ -9,7 +9,7 @@ const BotCollection =({bots,enlistBot})=>{
             {bots.map((bot) => (
                 <Botcard key={bot.id} bot={bot} handleClick={enlistBot} />
             ))}
- </div>
+        </div>
     </div>
   );
 };

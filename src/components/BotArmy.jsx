@@ -1,16 +1,7 @@
 import React from "react";
 import BotCard from "./BotCard";
 
-const BotArmy=({army }) =>{
-
-    const releaseBot=(bot)=>{
-        console.log ("Bot released:", bot);
-    };
-const deleteBot=(bot)=>{
-    console.log("Bot deleted:", bot);
-
-    };    
-    console.log(releaseBot);
+const BotArmy=({army, releasebot, deletebot}) => {
 
     return(
         <div className="bot-army">
@@ -20,8 +11,8 @@ const deleteBot=(bot)=>{
                     <BotCard
                     key={bot.id}
                     bot={bot}
-                    handleClick={()=> console.log("Clicked",bot)}
-                    handleDelete={deleteBot}
+                    handleClick={()=> releasebot(bot)}
+                    handleDelete={deletebot(bot)}
                     />
                 ))}
             </div>
